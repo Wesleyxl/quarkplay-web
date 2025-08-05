@@ -1,23 +1,75 @@
 import js from '@eslint/js'
+import prettier from 'eslint-config-prettier'
+import hooks from 'eslint-plugin-react-hooks'
+import refresh from 'eslint-plugin-react-refresh'
+import react from 'eslint-plugin-react/configs/recommended.js'
 import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import tseslint from 'typescript-eslint'
-import { globalIgnores } from 'eslint/config'
+import ts from 'typescript-eslint'
 
-export default tseslint.config([
-  globalIgnores(['dist']),
+export default [
+  // Configurações base
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  react,
   {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      js.configs.recommended,
-      tseslint.configs.recommended,
-      reactHooks.configs['recommended-latest'],
-      reactRefresh.configs.vite,
-    ],
+    // Define ambientes globais (browser, ES2025, etc.)
     languageOptions: {
-      ecmaVersion: 2020,
-      globals: globals.browser,
+      globals: {
+        ...globals.browser,
+        ...globals.es2021,
+      },
+      parserOptions: {
+        ecmaFeatures: {
+          jsx: true,
+        },
+        ecmaVersion: 'latest',
+        sourceType: 'module',
+      },
+    },
+    // Plugins adicionais
+    plugins: {
+      'react-hooks': hooks,
+      'react-refresh': refresh,
+    },
+    // Regras personalizadas (modernas e estritas)
+    rules: {
+      // React 19+
+      'react/react-in-jsx-scope': 'off',
+      'react/jsx-uses-react': 'off',
+      'react/jsx-key': ['error', { checkFragmentShorthand: true }],
+      'react/self-closing-comp': 'error',
+      'react/jsx-no-leaked-render': ['error', { validStrategies: ['ternary'] }],
+
+      // Hooks
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': [
+        'warn',
+        { additionalHooks: '(useMemoizedFn|useLatestRef)' },
+      ],
+
+      // React Refresh (Fast Refresh)
+      'react-refresh/only-export-components': [
+        'warn',
+        { allowConstantExport: true, allowExportNames: ['metadata'] },
+      ],
+
+      // TypeScript
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/consistent-type-imports': 'error',
+
+      // Boas práticas JavaScript/TypeScript moderno
+      'no-constructor-return': 'error',
+      'no-promise-executor-return': 'error',
+      'no-unreachable-loop': 'error',
+      'require-atomic-updates': 'error',
+      'default-param-last': 'error',
+      'no-constant-binary-expression': 'error',
     },
   },
-])
+  // Prettier (SEMPRE por último)
+  prettier,
+]

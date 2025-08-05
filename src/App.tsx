@@ -1,34 +1,120 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react'
+import { showAtomName } from 'utils/name'
+import { AtomModel } from './components/AtomModel'
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const [protons, setProtons] = React.useState(1)
+  const [neutrons, setNeutrons] = React.useState(0)
+  const [electrons, setElectrons] = React.useState(1)
+  const [atomName, setAtomName] = React.useState('Hidrogênio')
+
+  const handleAdd = (type: string): void => {
+    switch (type) {
+      case 'proton':
+        setProtons(protons + 1)
+        break
+      case 'neutron':
+        setNeutrons(neutrons + 1)
+        break
+      case 'electron':
+        setElectrons(electrons + 1)
+        break
+      default:
+        break
+    }
+  }
+
+  const handleRemove = (type: string): void => {
+    switch (type) {
+      case 'proton':
+        if (protons > 0) {
+          setProtons(protons - 1)
+        } else {
+          setProtons(0)
+        }
+        break
+      case 'neutron':
+        if (neutrons > 0) {
+          setNeutrons(neutrons - 1)
+        } else {
+          setNeutrons(0)
+        }
+
+        break
+      case 'electron':
+        if (electrons > 0) {
+          setElectrons(electrons - 1)
+        } else {
+          setElectrons(0)
+        }
+        break
+      default:
+        break
+    }
+  }
+
+  React.useEffect(() => {
+    setAtomName(showAtomName(protons))
+  }, [protons])
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div
+      style={{
+        height: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: '20px',
+        backgroundColor: '#f0f0f0',
+        padding: '20px',
+      }}
+    >
+      <h1 style={{ color: '#333' }}>
+        Modelo Atômico Interativo - {atomName}{' '}
+        <span style={{ fontSize: 12, position: 'relative', top: -10 }}>
+          {protons + neutrons}
+        </span>
+      </h1>
+
+      <div
+        style={{
+          border: '2px solid #ccc',
+          borderRadius: '10px',
+          padding: '20px',
+          backgroundColor: '#fff',
+          boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
+        }}
+      >
+        <AtomModel
+          protons={protons}
+          neutrons={neutrons}
+          electrons={electrons}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div
+        style={{
+          display: 'flex',
+          gap: '10px',
+          flexWrap: 'wrap',
+          justifyContent: 'center',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <button onClick={() => handleAdd('proton')}>+ Próton</button>
+          <button onClick={() => handleRemove('proton')}>- Próton</button>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <button onClick={() => handleAdd('neutron')}>+ Nêutron</button>
+          <button onClick={() => handleRemove('neutron')}>- Nêutron</button>
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+          <button onClick={() => handleAdd('electron')}>+ Elétron</button>
+          <button onClick={() => handleRemove('electron')}>- Elétron</button>
+        </div>
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
