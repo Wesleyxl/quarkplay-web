@@ -13,44 +13,49 @@ interface AtomModelProps {
   electrons: number
 }
 
-// Capacidade máxima de elétrons para até 15 camadas
-const SHELL_CAPACITIES = [1, 2, 3, 4, 5, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+// Capacidade máxima de elétrons para até 8 camadas
+const SHELL_CAPACITIES = [2, 8, 8, 18, 18, 18, 18, 18]
 
 export function AtomModel({ protons, neutrons, electrons }: AtomModelProps) {
-  const width = 400
-  const height = 400
+  const width = 600
+  const height = 500
   const centerX = width / 2
   const centerY = height / 2
 
-  const BASE_RADIUS = 120
+  const BASE_RADIUS = 150 //
   const RADIUS_INCREMENT = 12
 
   const shells = []
   let electronsToPlace = electrons
   let shellIndex = 0
+  const rotationTypes = [0, 45, 90, 135, 180, 225, 270, 315] // Rotação em graus para cada camada
 
   while (electronsToPlace > 0 && shellIndex < SHELL_CAPACITIES.length) {
     const capacity = SHELL_CAPACITIES[shellIndex]
     const electronsInThisShell = Math.min(electronsToPlace, capacity)
 
     // Gerando os valores aleatórios
-    const rotation = getRandom(0, 360)
-    const tilt = getRandom(25, 65)
-    const speed = getRandom(8, 20) * (1 + shellIndex * 0.1)
+    // const rotation = getRandom(0, 360)
+    // const tilt = getRandom(25, 65)
+    // const speed = getRandom(8, 20) * (1 + shellIndex * 0.1)
 
-    // Log para registrar os dados
-    console.log(`Camada ${shellIndex + 1}:
-      Rotação: ${rotation.toFixed(2)} graus
-      Inclinação (Tilt): ${tilt.toFixed(2)} graus
-      Velocidade: ${speed.toFixed(2)}s
-      Número de Elétrons: ${electronsInThisShell}`)
+    const tilt = 25
+    const speed = getRandom(8, 20) * (1 + shellIndex * 0.01)
+    const rotation = rotationTypes[shellIndex % rotationTypes.length]
+
+    // // Log para registrar os dados
+    // console.log(`Camada ${shellIndex + 1}:
+    //   Rotação: ${rotation.toFixed(2)} graus
+    //   Inclinação (Tilt): ${tilt.toFixed(2)} graus
+    //   Velocidade: ${speed.toFixed(2)}s
+    //   Número de Elétrons: ${electronsInThisShell}`)
 
     shells.push({
       id: shellIndex,
       radius: BASE_RADIUS + shellIndex * RADIUS_INCREMENT,
       tilt: tilt,
       rotation: rotation,
-      speed: speed,
+      speed: speed + 0.1,
       electronsInShell: electronsInThisShell,
     })
 

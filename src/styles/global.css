@@ -1,0 +1,13 @@
+.unstable-vibration {
+  animation: atomVibrate 0.1s infinite alternate linear;
+  /* Se estiver usando styled-components, pode jogar no styled! */
+}
+
+@keyframes atomVibrate {
+  from {
+    transform: translate(0, 0);
+  }
+  to {
+    transform: translate(-4px, 4px);
+  }
+}

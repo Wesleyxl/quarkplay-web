@@ -76,13 +76,16 @@ const App: React.FC = () => {
           {protons + neutrons}
         </span>
       </h1>
+      <p style={{ color: '#555', fontSize: '18px' }}>
+        Protons: {protons}, Neutrons: {neutrons}, Eletrons: {electrons}
+      </p>
 
       <div
         style={{
           border: '2px solid #ccc',
           borderRadius: '10px',
           padding: '20px',
-          backgroundColor: '#fff',
+          backgroundColor: '#000',
           boxShadow: '0 4px 8px rgba(0,0,0,0.1)',
         }}
       >

@@ -2,21 +2,32 @@ interface NeutronProps {
   x: number
   y: number
   radius: number
-  color: string
+  color?: string
 }
 
-export function Neutron({ x, y, radius, color }: NeutronProps) {
+export function Neutron({ x, y, radius, color = '#2979FF' }: NeutronProps) {
+  // Glow cinza-azulado só pra dar aquele charme neutro
+  const glowColor = '#2979FF'
+  const glowIntensity = '0 0 10px'
   return (
     <g>
-      <circle cx={x} cy={y} r={radius} fill={color} />
+      <circle
+        cx={x}
+        cy={y}
+        r={radius}
+        fill={color}
+        style={{
+          filter: `drop-shadow(${glowIntensity} ${glowColor})`,
+        }}
+      />
       <text
         x={x}
         y={y}
-        fill='#000' // Cor da letra
-        fontSize={`${radius * 1.2}px`} // Tamanho da letra baseado no raio
+        fill='#000'
+        fontSize={radius * 1.2}
         fontWeight='bold'
-        textAnchor='middle' // Alinha horizontalmente o texto ao centro
-        dominantBaseline='central' // Alinha verticalmente o texto ao centro
+        textAnchor='middle'
+        dominantBaseline='middle'
       >
         N
       </text>

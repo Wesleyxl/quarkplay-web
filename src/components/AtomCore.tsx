@@ -1,3 +1,4 @@
+import { isStable } from '../utils/isStable'
 import { getNuclearPositions } from '../utils/nuclearLayout'
 import { Neutron } from './Neutron'
 import { Proton } from './Proton'
@@ -15,7 +16,8 @@ export function AtomCore({
   centerX,
   centerY,
 }: AtomCoreProps) {
-  const particleRadius = 12 // Define o raio das partículas
+  const particleRadius = 12
+
   const positions = getNuclearPositions(
     protons,
     neutrons,
@@ -24,19 +26,19 @@ export function AtomCore({
     particleRadius,
   )
 
+  const stable = isStable(protons, neutrons)
+
   return (
-    <>
+    <g className={stable ? '' : 'unstable-vibration'}>
       {positions.map((particle, i) => {
         const key = `${particle.type}-${i}`
-        const color = particle.type === 'proton' ? '#FF6B6B' : '#4DABF5'
-
         return particle.type === 'proton' ? (
           <Proton
             key={key}
             x={particle.x}
             y={particle.y}
             radius={particleRadius}
-            color={color}
+            // color='#E53935' // vermelho vibrante, se quiser custom
           />
         ) : (
           <Neutron
@@ -44,10 +46,10 @@ export function AtomCore({
             x={particle.x}
             y={particle.y}
             radius={particleRadius}
-            color={color}
+            // color='#2979FF' // azul forte, se quiser custom
           />
         )
       })}
-    </>
+    </g>
   )
 }

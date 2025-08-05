@@ -27,25 +27,36 @@ export function getNuclearPositions(
     ]
   }
 
-  const baseSpacing = particleRadius * 2 * 0.8 // Espaçamento para empacotamento compacto
+  const baseSpacing = particleRadius * 2 * 0.8
+  const MAX_LAYERS = 4 // Limite de camadas (índices 0 a 4)
 
-  // Define um layout em camadas circulares
   let particleIndex = 0
-  let currentRadius = 0
-  let layer = 0
 
-  while (particleIndex < totalParticles) {
+  // 1. Preenche as camadas em um layout circular até o limite de MAX_LAYERS
+  for (
+    let layer = 0;
+    layer < MAX_LAYERS && particleIndex < totalParticles;
+    layer++
+  ) {
+    const currentRadius = layer * baseSpacing
     const particlesInLayer =
       layer === 0
         ? 1
         : Math.max(1, Math.floor((2 * Math.PI * currentRadius) / baseSpacing))
-    const angleIncrement = (2 * Math.PI) / particlesInLayer
 
-    for (
-      let i = 0;
-      i < particlesInLayer && particleIndex < totalParticles;
-      i++
-    ) {
+    // Garante que não tentamos colocar mais partículas do que temos
+    const particlesToPlaceInThisLayer = Math.min(
+      particlesInLayer,
+      totalParticles - particleIndex,
+    )
+
+    if (particlesToPlaceInThisLayer === 0) {
+      break
+    }
+
+    const angleIncrement = (2 * Math.PI) / particlesToPlaceInThisLayer
+
+    for (let i = 0; i < particlesToPlaceInThisLayer; i++) {
       const angle = i * angleIncrement
       const x = centerX + currentRadius * Math.cos(angle)
       const y = centerY + currentRadius * Math.sin(angle)
@@ -56,9 +67,30 @@ export function getNuclearPositions(
       })
       particleIndex++
     }
+    // Removed unused maxRadius assignment
+  }
 
-    layer++
-    currentRadius = layer * baseSpacing * 0.8 // Ajusta o raio da próxima camada
+  // 2. Coloca as partículas restantes de forma aleatória dentro da área do núcleo
+  if (particleIndex < totalParticles) {
+    const remainingParticles = particles.slice(particleIndex)
+
+    // O raio máximo para a distribuição aleatória é o raio da última camada (índice 4)
+    const maxRandomRadius = (MAX_LAYERS - 1) * baseSpacing
+
+    for (const particleType of remainingParticles) {
+      // Gera um ângulo e um raio aleatórios para a posição da partícula
+      const randomAngle = Math.random() * 2 * Math.PI
+      const randomRadius = Math.random() * maxRandomRadius
+
+      const x = centerX + randomRadius * Math.cos(randomAngle)
+      const y = centerY + randomRadius * Math.sin(randomAngle)
+
+      positions.push({
+        x,
+        y,
+        type: particleType as 'proton' | 'neutron',
+      })
+    }
   }
 
   return positions
