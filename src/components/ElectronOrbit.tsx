@@ -1,6 +1,4 @@
-// components/ElectronShell.tsx
-
-interface ElectronShellProps {
+interface ElectronOrbitProps {
   shellId: number
   orbitalRadius: number
   speed: number
@@ -11,7 +9,7 @@ interface ElectronShellProps {
   electronsInShell: number
 }
 
-export function ElectronShell({
+export function ElectronOrbit({
   shellId,
   orbitalRadius,
   speed,
@@ -20,7 +18,7 @@ export function ElectronShell({
   tilt,
   rotation,
   electronsInShell,
-}: ElectronShellProps) {
+}: ElectronOrbitProps) {
   const rx = orbitalRadius
   const ry = orbitalRadius * Math.sin(Math.max(5, tilt) * (Math.PI / 180))
   const orbitPathId = `orbit-path-${shellId}`

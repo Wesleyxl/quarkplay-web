@@ -1,21 +1,24 @@
-interface NeutronProps {
+import { particlesColor } from 'styles/particlesColor'
+
+interface ProtonProps {
   x: number
   y: number
   radius: number
-  color?: string
 }
 
-export function Neutron({ x, y, radius, color = '#2979FF' }: NeutronProps) {
-  // Glow cinza-azulado só pra dar aquele charme neutro
-  const glowColor = '#2979FF'
+export function Proton({ x, y, radius }: ProtonProps) {
+  // Para um efeito glow mais garantido cross-browser, use filter SVG, mas no React pode tentar o CSS drop-shadow.
+  // Vou deixar ambos, com prioridade pro CSS (simples e rápido)
+  const glowColor = particlesColor.proton
   const glowIntensity = '0 0 10px'
+
   return (
     <g>
       <circle
         cx={x}
         cy={y}
         r={radius}
-        fill={color}
+        fill={particlesColor.proton}
         style={{
           filter: `drop-shadow(${glowIntensity} ${glowColor})`,
         }}
@@ -27,9 +30,9 @@ export function Neutron({ x, y, radius, color = '#2979FF' }: NeutronProps) {
         fontSize={radius * 1.2}
         fontWeight='bold'
         textAnchor='middle'
-        dominantBaseline='middle'
+        dominantBaseline='central'
       >
-        N
+        P
       </text>
     </g>
   )

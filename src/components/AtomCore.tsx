@@ -1,13 +1,13 @@
-import { isStable } from '../utils/isStable'
 import { getNuclearPositions } from '../utils/nuclearLayout'
-import { Neutron } from './Neutron'
-import { Proton } from './Proton'
+import { Neutron } from './Particles/Neutron'
+import { Proton } from './Particles/Proton'
 
 interface AtomCoreProps {
   protons: number
   neutrons: number
   centerX: number
   centerY: number
+  stable: boolean
 }
 
 export function AtomCore({
@@ -15,6 +15,7 @@ export function AtomCore({
   neutrons,
   centerX,
   centerY,
+  stable,
 }: AtomCoreProps) {
   const particleRadius = 12
 
@@ -25,8 +26,6 @@ export function AtomCore({
     centerY,
     particleRadius,
   )
-
-  const stable = isStable(protons, neutrons)
 
   return (
     <g className={stable ? '' : 'unstable-vibration'}>

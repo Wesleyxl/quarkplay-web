@@ -24,19 +24,16 @@
     "noUncheckedSideEffectImports": true,
     "baseUrl": ".",
     "paths": {
+      "animations/*": ["./src/animations/*"],
       "assets/*": ["./src/assets/*"],
       "components/*": ["./src/components/*"],
-      "core/*": ["./src/core/*"],
-      "renderer/*": ["./src/renderer/*"],
-      "sim/*": ["./src/sim/*"],
-      "stores/*": ["./src/stores/*"],
+      "hooks/*": ["./src/hooks/*"],
+      "logic/*": ["./src/logic/*"],
+      "physics/*": ["./src/physics/*"],
+      "styles/*": ["./src/styles/*"],
       "types/*": ["./src/types/*"],
       "pages/*": ["./src/pages/*"],
-      "hooks/*": ["./src/hooks/*"],
-      "services/*": ["./src/services/*"],
-      "styles/*": ["./src/styles/*"],
-      "utils/*": ["./src/utils/*"],
-      "config/*": ["./src/config/*"]
+      "utils/*": ["./src/utils/*"]
     }
   },
   "include": ["src"]
